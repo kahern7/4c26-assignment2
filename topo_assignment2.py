@@ -11,8 +11,8 @@ def assignmentTopo():
     ######################################################################################
     ############ CODE SHOULD ONLY BE ADDED BELOW  #################################
     info( '*** Adding controller\n' )
-     # =>add the controller here
-     net.addController('c0', controller=RemoteController)
+    # =>add the controller here
+    net.addController('c0', controller=RemoteController)
 
     info( '*** Adding hosts\n' )
     h1 = net.addHost( 'h1', ip='10.0.0.1', mac='00:00:00:00:00:01' )
@@ -40,11 +40,18 @@ def assignmentTopo():
     h1, h2, h3, h4 = net.hosts[0],net.hosts[1],net.hosts[2],net.hosts[3]
 
     # =>fill in here command to add two queues to the correct port of the correct switch: Q0 with min rate 20000000 and max rate -SELECT THE PROPER RATE-, Q1 with min rate 50000000 and max rate -SELECT THE PROPER RATE-
-    os.system('sudo ovs-vsctl set port s1-eth2 qos=@newqos -- --id=@newqos create qos type=linux-htb queues=0=@q0,1=@q1 -- --id=@q0 create queue other-config:min-rate=50000000 other-config:max-rate=1000000000000 --  --id=@q1 create queue other-config:min-rate=20000000 other-config:max-rate=150000000')
+    # s1 -> h2
+    os.system('sudo ovs-vsctl set port s1-eth2 qos=@newqos -- --id=@newqos create qos type=linux-htb queues=0=@q0,1=@q1 -- --id=@q0 create queue other-config:max-rate=1000000000000 --  --id=@q1 create queue other-config:max-rate=150000000')
     # =>fill in here command to add one queue to the correct port of the correct switch: Q0 with min rate 20000000 and max rate -SELECT THE PROPER RATE-
-    os.system('sudo ovs-vsctl set port s2-eth3 qos=@newqos -- --id=@newqos create qos type=linux-htb queues=0=@q0,1=@q1 -- --id=@q0 create queue other-config:min-rate=50000000 other-config:max-rate=1000000000000 --  --id=@q1 create queue other-config:min-rate=20000000 other-config:max-rate=30000000')
+    # s1 -> s2
+    # os.system('sudo ovs-vsctl set port s1-eth3 qos=@newqos -- --id=@newqos create qos type=linux-htb queues=0=@q0,1=@q1 -- --id=@q0 create queue other-config:max-rate=1000000000000 --  --id=@q1 create queue other-config:max-rate=1000000000')
+    # s2 -> h3
+    os.system('sudo ovs-vsctl set port s2-eth1 qos=@newqos -- --id=@newqos create qos type=linux-htb queues=0=@q0,1=@q1 -- --id=@q0 create queue other-config:max-rate=1000000000000 --  --id=@q1 create queue other-config:max-rate=30000000')
     # =>fill in here command to add two queues to the correct port of the correct switch: you decide number of queues and rates
-    os.system('sudo ovs-vsctl set port s2-eth4 qos=@newqos -- --id=@newqos create qos type=linux-htb queues=0=@q0,1=@q1 -- --id=@q0 create queue other-config:min-rate=50000000 other-config:max-rate=1000000000000 --  --id=@q1 create queue other-config:min-rate=20000000 other-config:max-rate=200000000')
+    # s2 -> h4
+    os.system('sudo ovs-vsctl set port s2-eth2 qos=@newqos -- --id=@newqos create qos type=linux-htb queues=0=@q0,1=@q1 -- --id=@q0 create queue other-config:max-rate=1000000000000 --  --id=@q1 create queue other-config:max-rate=200000000')
+    # s2 -> s1
+    # os.system('sudo ovs-vsctl set port s2-eth3 qos=@newqos -- --id=@newqos create qos type=linux-htb queues=0=@q0,1=@q1 -- --id=@q0 create queue other-config:max-rate=1000000000000 --  --id=@q1 create queue other-config:max-rate=1000000000')
 
 
     ########### THIS IS THE END OF THE AREA WHERE YOU NEED TO ADD CODE ##################################
